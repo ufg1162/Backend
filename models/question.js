@@ -10,7 +10,7 @@ const questionSchema = new Schema(
     },
     type: {
         type: String,
-        require: true,
+        required: true,
     },
     choice: {
         one: String,
