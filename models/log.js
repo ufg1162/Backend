@@ -8,10 +8,8 @@ const logSchema = new Schema (
             required: true
         },
         questions: [{
-            question: {
-                type: Schema.Types.ObjectId,
-                ref: 'Question'
-            },
+            question: String,
+            type: String,
             answer: String
         }],
         user: {

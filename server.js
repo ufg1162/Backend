@@ -2,6 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const users = require('./routes/users');
+const questions = require('./routes/questions');
+const logs = require('./routes/logs');
 
 const app = express();
 const bodyParser = require('body-parser');
@@ -10,7 +13,7 @@ app.use(bodyParser.json());
 const sessionSecret = 'made a secret string';
 
 // Set up mongoose connection
-var dbURL = "";
+var dbURL = process.env.MONGO_URL || 'mongodb://localhost:27017/LogDay';
 mongoose.connect(dbURL, {useNewUrlParser: true, useUnifiedTopology: true});
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -48,7 +51,9 @@ app.use((req, res, next) => {
     next();
 });
 ///////////////////////////////////////////////////////////////////////////////////////////////
-
+app.use('/api', users);
+app.use('/api', questions);
+app.use('/api', logs);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 app.use((err, req, res, next) => {

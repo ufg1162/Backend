@@ -1,4 +1,5 @@
-const Note = require('');
+const User = require('../models/user');
+const Question = require('../models/question');
 const {wrapAsync} = require('../utils/helper');
 
 module.exports.isLoggedIn = (req, res, next) => {
@@ -19,3 +20,22 @@ module.exports.isAgent = wrapAsync(async (req, res, next) => {
     next();
 }); 
 
+// Checks if current sessionId and the User Id matches
+module.exports.isAuthorized = wrapAsync(async (req, res, next) => {
+    const id = req.params.id;
+    const user = await User.findById(id);
+    if (user._id && !user._id.equals(req.session.userId)) {
+        throw new Error("Not an authorized user", 401);
+    }
+    next();
+});
+
+// Checks if current sessionId and Owner of Question matches
+module.exports.isMyQuestion = wrapAsync(async (req, res, next) => {
+    const id = req.params.id;
+    const question = await Question.findById(id);
+    if (question.user && !question.user.equals(req.session.userId)) {
+        throw new Error("Not and authorized user for this question", 401);
+    }
+    next();
+})
