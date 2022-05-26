@@ -13,10 +13,7 @@ router.get('/questions', isLoggedIn, wrapAsync(async function (req, res) {
 
 router.post('/questions', isLoggedIn, wrapAsync(async function (req, res) {
     const question = new Question({
-        id: req.body.id,
-        text: req.body.text,
-        type: req.body.type,
-        choice: req.body.choice,
+        questions: req.body.questions,
         user: req.session.userId,
     })
     await question.save();
@@ -25,8 +22,8 @@ router.post('/questions', isLoggedIn, wrapAsync(async function (req, res) {
 
 router.put('/questions/:id', isMyQuestion, wrapAsync(async function (req, res) {
     const id = req.params.id;
-    const {text, type, choice} = req.body;
-    await Question.findByIdAndUpdate(id, {text, type, choice},
+    const {questions} = req.body;
+    await Question.findByIdAndUpdate(id, {questions},
         {runValidators: true});
     res.sendStatus(204);
 }))

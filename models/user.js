@@ -18,11 +18,6 @@ var userSchema = new Schema(
         maxlength: 100
     },
 
-    questions: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Question'
-    }], 
-
     email: {
         type: String,
         required: true,
