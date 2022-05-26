@@ -13,7 +13,7 @@ router.get('/questions', isLoggedIn, wrapAsync(async function (req, res) {
 
 router.post('/questions', isLoggedIn, wrapAsync(async function (req, res) {
     const question = new Question({
-        questions: req.body.questions,
+        questions: req.body,
         user: req.session.userId,
     })
     await question.save();
