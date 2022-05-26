@@ -8,9 +8,23 @@ const logSchema = new Schema (
             required: true
         },
         questions: [{
-            question: String,
-            type: String,
-            answer: String
+            question: {
+                type: String,
+                required: true
+            },
+            type: {
+                type: String,
+                required: true
+            },
+            answer: {
+                type: String, 
+                required: true
+            },
+            choice: {
+                one: String,
+                two: String,
+                three: String
+            }
         }],
         user: {
             type: Schema.Types.ObjectId,
