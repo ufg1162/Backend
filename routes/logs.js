@@ -14,7 +14,7 @@ router.post('/logs', isLoggedIn, wrapAsync(async function (req, res) {
     const log = new Log({
         date: req.body.date,
         questions: req.body.questions,
-        user: req.body.user
+        user: req.session.userId
     })
     await log.save();
     res.json(log);

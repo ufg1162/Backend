@@ -3,6 +3,13 @@ const bcrypt = require('bcrypt');
 const validator = require('../utils/validators')
 var Schema = mongoose.Schema;
 
+var addressSchema = new Schema(
+    {
+        one: String,
+        two: String
+    }
+)
+
 var userSchema = new Schema(
     {
     name: {
@@ -10,7 +17,12 @@ var userSchema = new Schema(
         required: true,
         maxlength: 100
     },
-    
+
+    questions: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Question'
+    }], 
+
     email: {
         type: String,
         required: true,
@@ -33,10 +45,7 @@ var userSchema = new Schema(
         type: String
     },
 
-    address: {
-        one: String,
-        two: String
-    }
+    address: [addressSchema]
     }
 );
 

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 const { wrapAsync } = require('../utils/helper');
-const { isAuthorized } = require('../middleware/auth');
+const { isAuthorized, isLoggedIn } = require('../middleware/auth');
 
 const multer = require('multer');
 const upload = multer({dest: 'uploads/'});
@@ -15,6 +15,11 @@ router.post('/users/:id/file', upload.single('image'), wrapAsync(async function 
     console.dir(req.file);
     res.json("File uploaded successfully");
 }));
+
+router.get('/curruser', isLoggedIn, wrapAsync(async function (req, res) {
+    let user = await User.find({_id: req.session.userId}).populate('address');
+    res.json(user);
+}))
 
 // Handle Register
 router.post('/register', wrapAsync(async function (req, res) {

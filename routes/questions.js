@@ -17,7 +17,7 @@ router.post('/questions', isLoggedIn, wrapAsync(async function (req, res) {
         text: req.body.text,
         type: req.body.type,
         choice: req.body.choice,
-        user: req.body.user
+        user: req.session.userId,
     })
     await question.save();
     res.json(question);
