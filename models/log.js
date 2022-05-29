@@ -8,6 +8,7 @@ const logSchema = new Schema (
             required: true
         },
         questions: [{
+            id: String,
             question: {
                 type: String,
                 required: true
