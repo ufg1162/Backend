@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 const sessionSecret = 'made a secret string';
 
 // Set up mongoose connection
-var dbURL = process.env.MONGO_URL || 'mongodb://localhost:27017/LogDay';
+var dbURL = process.env.MONGO_URL || "mongodb+srv://natnaelbereda:IosADnkyBdQsXluK@cse316hw3.yfcv9.mongodb.net/CSE316_Final_Project?retryWrites=true&w=majority";
 mongoose.connect(dbURL, {useNewUrlParser: true, useUnifiedTopology: true});
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
