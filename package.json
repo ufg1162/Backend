@@ -19,7 +19,7 @@
     "npm": "8.x"
   },
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "node server.js",
     "test": "jest"
   },
   "devDependencies": {
