@@ -2,12 +2,18 @@ const express = require('express');
 const router = express.Router();
 const Question = require('../models/question');
 const { wrapAsync } = require('../utils/helper');
-const { isMyQuestion, isLoggedIn } = require('../middleware/auth');
+const { isMyQuestion, isLoggedIn, isAdmin } = require('../middleware/auth');
 
 
 router.get('/questions', isLoggedIn, wrapAsync(async function (req, res) {
     const questions = await Question.find({user: req.session.userId})
     res.json(questions);
+}))
+
+router.get('/questions/:id', isAdmin, wrapAsync(async function (req, res) {
+    const id = req.params.id;
+    const question = await Question.find({user: id})
+    res.json(question);
 }))
 
 

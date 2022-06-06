@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const Question = require('../models/question');
+const Log = require('../models/log');
 const {wrapAsync} = require('../utils/helper');
 
 module.exports.isLoggedIn = (req, res, next) => {
@@ -35,11 +36,27 @@ module.exports.isMyQuestion = wrapAsync(async (req, res, next) => {
     const id = req.params.id;
     const question = await Question.findById(id);
     if (question.user && !question.user.equals(req.session.userId)) {
-        throw new Error("Not and authorized user for this question", 401);
+        throw new Error("Not an authorized user for this question", 401);
     }
     next();
 })
 
+module.exports.isAdmin = wrapAsync(async (req, res, next) => {
+    const admin = await User.findById('629cb4b029120e23b204d240');
+    if (!admin.equals(req.session.userId)) {
+        throw new Error("Not an administrator account");
+    }
+    next();
+})
+
+module.exports.isMyLog = wrapAsync(async (req, res, next) => {
+    const id = req.params.id;
+    const log = await Log.findById(id);
+    if (log.user && !log.user.equals(req.session.userId)) {
+        throw new Error("Not an authorized user for this log", 401);
+    }
+    next();
+})
 // // Checks if current user is Admin
 // module.exports.isAdmin = wrapAsync(async (req, res, next) => {
 //     const id = req.params.id;
