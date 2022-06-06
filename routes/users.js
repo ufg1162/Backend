@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 const { wrapAsync } = require('../utils/helper');
-const { isAuthorized, isLoggedIn } = require('../middleware/auth');
+const { isAuthorized, isLoggedIn, isAdmin } = require('../middleware/auth');
 
 const multer = require('multer');
 const upload = multer({dest: 'uploads/'});
@@ -23,20 +23,23 @@ router.get('/curruser', isLoggedIn, wrapAsync(async function (req, res) {
 
 // Handle Register
 router.post('/register', wrapAsync(async function (req, res) {
-    const {name, email, password} = req.body;
-    const user = new User({name, email, password});
+    const {name, email, password,isadmin} = req.body;
+
+    const user = new User({name,email, password,isadmin});
     await user.save();
     req.session.userId = user._id;
     res.json(user);
 }))
-
+ 
 // Handle Login
 router.post('/login', wrapAsync(async function (req, res) {
     const {email, password} = req.body;
     const user = await User.findAndValidate(email, password);
     if (user) {
         req.session.userId = user._id;
-        res.sendStatus(204);
+        //res.sendStatus(204);
+        res.json({userId:req.session.userId, name: user.name, isadmin: user.isadmin, email: user.email, image: user.image, address: user.address, status:204})
+        console.log("logged in");
     }
     else {
         res.sendStatus(401);
@@ -47,6 +50,7 @@ router.post('/login', wrapAsync(async function (req, res) {
 router.post('/logout', wrapAsync(async function (req, res) {
     req.session.userId = null;
     res.sendStatus(204);
+    console.log("logged out");
 }))
 
 // Edit User Profile
@@ -58,6 +62,8 @@ router.put('/users/:id', isAuthorized, wrapAsync(async function (req, res) {
     res.sendStatus(204);
 }))
 
+
+
 // Check if the seesionId is available
 router.post('/auth', wrapAsync(async function (req, res) {
     if (!req.session.userId) {
@@ -65,7 +71,26 @@ router.post('/auth', wrapAsync(async function (req, res) {
     }
     else {
         res.json(true);
+      
     }
 }))
+
+router.get('/users', isLoggedIn, wrapAsync(async function (req, res) {
+    console.log("Accessed by user id: " + req.session.userId);
+    
+    const allUsers = await User.find();
+    res.json(allUsers);
+
+    
+}));
+
+router.delete('/users/:id', wrapAsync(async function (req, res) {
+    const id = req.params.id;
+    console.log(id);
+    const result = await User.findByIdAndDelete(id);
+    console.log("Deleted successfully: " + result);
+    res.json(result);
+}));
+  
 
 module.exports = router;

@@ -39,3 +39,14 @@ module.exports.isMyQuestion = wrapAsync(async (req, res, next) => {
     }
     next();
 })
+
+// // Checks if current user is Admin
+// module.exports.isAdmin = wrapAsync(async (req, res, next) => {
+//     const id = req.params.id;
+//     const admin = req.params.admin;
+//     const user = await User.findById(id);
+//     if (user._id && !user._id.equals(req.session.userId) && user.admin === 0) {
+//         throw new Error("Not an authorized user (Not Admin)", 401);
+//     }
+//     next();
+// });

@@ -28,4 +28,10 @@ router.put('/logs/:id', isLoggedIn, wrapAsync(async function (req, res) {
     res.sendStatus(204);
 }))
 
+router.get('/logs', isLoggedIn, wrapAsync(async function (req, res) {
+    const string_Ans = await Log.find({user: req.session.userId});
+    res.json(string_Ans);
+
+}))
+
 module.exports = router;

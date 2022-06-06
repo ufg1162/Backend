@@ -9,6 +9,10 @@ const logSchema = new Schema (
         },
         questions: [{
             id: String,
+            date_inside: {
+                type: String,
+                required: true
+            },
             question: {
                 type: String,
                 required: true

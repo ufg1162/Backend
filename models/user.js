@@ -17,6 +17,10 @@ var userSchema = new Schema(
         required: true,
         maxlength: 100
     },
+    isadmin : {
+        type: Boolean
+       
+    },
 
     email: {
         type: String,
@@ -29,7 +33,6 @@ var userSchema = new Schema(
         unique: true,
         maxlength: 100
     },
-
     password: {
         type: String,
         required: true,
